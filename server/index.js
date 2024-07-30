@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
@@ -5,9 +6,7 @@ const authRoutes = require("./routes/auth");
 const messageRoutes = require("./routes/messages");
 const app = express();
 const socket = require("socket.io");
-require("dotenv").config();
 const { GoogleGenerativeAI } = require("@google/generative-ai");
-
 
 const genAI = new GoogleGenerativeAI(process.env.API_KEY);
 
