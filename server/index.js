@@ -6,11 +6,17 @@ const authRoutes = require("./routes/auth");
 const messageRoutes = require("./routes/messages");
 const app = express();
 const socket = require("socket.io");
+const fetch = require("node-fetch"); // Add this line
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
-const genAI = new GoogleGenerativeAI(process.env.API_KEY);
+const genAI = new GoogleGenerativeAI(process.env.API_KEY, { fetch }); // Pass fetch to GoogleGenerativeAI
 
-app.use(cors());
+const corsOptions = {
+  origin: "https://swift-chat-app.vercel.app",
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 mongoose
@@ -19,7 +25,7 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(() => {
-    console.log("DB Connetion Successfull");
+    console.log("DB Connection Successful");
   })
   .catch((err) => {
     console.log(err.message);
@@ -63,7 +69,7 @@ io.on("connection", (socket) => {
   socket.on("send-msg", (data) => {
     const sendUserSocket = onlineUsers.get(data.to);
     if (sendUserSocket) {
-      socket.to(sendUserSocket).emit("msg-recieve", data.msg);
+      socket.to(sendUserSocket).emit("msg-receive", data.msg);
     }
   });
 });
