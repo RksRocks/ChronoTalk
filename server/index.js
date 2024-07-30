@@ -7,7 +7,7 @@ const app = express();
 const socket = require("socket.io");
 require("dotenv").config();
 const { GoogleGenerativeAI } = require("@google/generative-ai");
-require("dotenv").config();
+
 
 const genAI = new GoogleGenerativeAI(process.env.API_KEY);
 
@@ -49,7 +49,7 @@ const server = app.listen(process.env.PORT, () =>
 );
 const io = socket(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: "https://swift-chat-app.vercel.app",
     credentials: true,
   },
 });
