@@ -6,7 +6,7 @@ const authRoutes = require("./routes/auth");
 const messageRoutes = require("./routes/messages");
 const app = express();
 const socket = require("socket.io");
-const fetch = require("node-fetch"); // Add this line
+import { fetch } from "node-fetch"; // Add this line
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 const genAI = new GoogleGenerativeAI(process.env.API_KEY, { fetch }); // Pass fetch to GoogleGenerativeAI
