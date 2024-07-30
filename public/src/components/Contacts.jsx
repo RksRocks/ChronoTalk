@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import Logo from "../assets/logo.svg";
+import Logo from "../assets/logo-no-background.png";
 
 export default function Contacts({ contacts, changeChat }) {
   const [currentUserName, setCurrentUserName] = useState(undefined);
@@ -23,9 +23,25 @@ export default function Contacts({ contacts, changeChat }) {
         <Container>
           <div className="brand">
             <img src={Logo} alt="logo" />
-            <h3>snappy</h3>
           </div>
           <div className="contacts">
+            <div
+              className={`contact ${
+                currentSelected === "AI" ? "selected" : ""
+              }`}
+              onClick={() => {
+                setCurrentSelected("AI");
+                changeChat("AI");
+              }}
+              // onClick={() => changeCurrentChat(index, contact)}
+            >
+              <div className="avatar">
+                <img src={`https://api.multiavatar.com/4645646.svg`} alt="" />
+              </div>
+              <div className="username">
+                <h3>AI</h3>
+              </div>
+            </div>
             {contacts.map((contact, index) => {
               return (
                 <div
@@ -68,7 +84,8 @@ const Container = styled.div`
   display: grid;
   grid-template-rows: 10% 75% 15%;
   overflow: hidden;
-  background-color: #080420;
+  border-radius: 20px;
+  background-color: #231239;
   .brand {
     display: flex;
     align-items: center;
@@ -88,6 +105,7 @@ const Container = styled.div`
     align-items: center;
     overflow: auto;
     gap: 0.8rem;
+    border-radius: 24px;
     &::-webkit-scrollbar {
       width: 0.2rem;
       &-thumb {
@@ -97,7 +115,7 @@ const Container = styled.div`
       }
     }
     .contact {
-      background-color: #ffffff34;
+      background-color: #ffffff14;
       min-height: 5rem;
       cursor: pointer;
       width: 90%;
@@ -106,7 +124,7 @@ const Container = styled.div`
       display: flex;
       gap: 1rem;
       align-items: center;
-      transition: 0.5s ease-in-out;
+      transition: 0.3s ease-in-out;
       .avatar {
         img {
           height: 3rem;
@@ -114,30 +132,34 @@ const Container = styled.div`
       }
       .username {
         h3 {
-          color: white;
+          color: #d62176;
         }
       }
     }
     .selected {
-      background-color: #9a86f3;
+      background-color: #f4ab4f;
     }
   }
 
   .current-user {
-    background-color: #0d0d30;
+    background-color: #16052d;
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 2rem;
+    gap: 1rem;
+    height: 4rem;
+    align-self: end;
+    padding: 25px 0px;
+
     .avatar {
       img {
-        height: 4rem;
+        height: 2.8rem;
         max-inline-size: 100%;
       }
     }
     .username {
       h2 {
-        color: white;
+        color: #f4ab4f;
       }
     }
     @media screen and (min-width: 720px) and (max-width: 1080px) {
@@ -145,6 +167,14 @@ const Container = styled.div`
       .username {
         h2 {
           font-size: 1rem;
+        }
+      }
+    }
+    @media screen and (max-width: 720px) {
+      height: 4rem;
+      .username {
+        h2 {
+          display: none;
         }
       }
     }
