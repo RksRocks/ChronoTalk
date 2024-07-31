@@ -17,8 +17,16 @@ function AiChatContainer() {
   }, [arrivalMessage]);
   const handleSendMsg = async (msg) => {
     setMessages((prev) => [...prev, { fromSelf: true, message: msg }]);
-    const res = await axios.post(host + "/ai/chat", { msg: msg });
-    setArrivalMessage({ fromSelf: false, message: res.data.msg });
+    const res = await axios({
+      url: "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyABztKyTMpqyhLM99-oTtKBlggjA5LWJhY",
+      method: "POST",
+      data: { contents: [{ parts: [{ text: msg }] }] },
+    });
+    setArrivalMessage({
+      fromSelf: false,
+      message: res.data.candidates[0].content.parts[0].text,
+    });
+    // setArrivalMessage({ fromSelf: false, message: res.data.msg });
   };
   return (
     <Container>
