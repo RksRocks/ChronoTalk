@@ -18,7 +18,9 @@ function AiChatContainer() {
   const handleSendMsg = async (msg) => {
     setMessages((prev) => [...prev, { fromSelf: true, message: msg }]);
     const res = await axios({
-      url: "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyABztKyTMpqyhLM99-oTtKBlggjA5LWJhY",
+      url:
+        "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=" +
+        process.env.REACT_APP_API_KEY,
       method: "POST",
       data: { contents: [{ parts: [{ text: msg }] }] },
     });
