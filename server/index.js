@@ -7,8 +7,10 @@ const messageRoutes = require("./routes/messages");
 const app = express();
 const socket = require("socket.io");
 const { GoogleGenerativeAI } = require("@google/generative-ai");
-
+const { ProxyAgent } = require("undici");
 const genAI = new GoogleGenerativeAI(process.env.API_KEY); // Pass fetch to GoogleGenerativeAI
+
+const dispatcher = new ProxyAgent("https://swift-chat-app.vercel.app");
 
 const corsOptions = {
   origin: "https://swift-chat-app.vercel.app",
@@ -35,7 +37,7 @@ app.get("/ping", (_req, res) => {
 });
 
 app.post("/ai/chat", async (req, res) => {
-  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" },{dispatcher});
   const prompt = req.body.msg;
   const result = await model.generateContent(prompt);
   const response = await result.response;
