@@ -6,13 +6,12 @@ const authRoutes = require("./routes/auth");
 const messageRoutes = require("./routes/messages");
 const app = express();
 const socket = require("socket.io");
-const fetch = require("node-fetch");
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
-const genAI = new GoogleGenerativeAI(process.env.API_KEY, { fetch }); // Pass fetch to GoogleGenerativeAI
+const genAI = new GoogleGenerativeAI(process.env.API_KEY); // Pass fetch to GoogleGenerativeAI
 
 const corsOptions = {
-  origin: "*",
+  origin: "https://swift-chat-app.vercel.app",
   credentials: true,
 };
 
@@ -54,7 +53,7 @@ const server = app.listen(process.env.PORT, () =>
 );
 const io = socket(server, {
   cors: {
-    origin: "*",
+    origin: "https://swift-chat-app.vercel.app",
     credentials: true,
   },
 });
