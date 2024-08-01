@@ -27,6 +27,14 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: "",
   },
+  timeSpent: {
+    type: Number,
+    default: 0,
+  },
+  lastLoginDate: {
+    type: Date,
+    default: new Date(),
+  },
 });
 
 module.exports = mongoose.model("Users", userSchema);

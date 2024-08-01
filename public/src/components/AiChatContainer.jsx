@@ -20,7 +20,7 @@ function AiChatContainer() {
     const res = await axios.post(host + "/ai/chat");
     const googleRes = await axios({
       url:
-        "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=" +
+        "https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=" +
         res.data.msg,
       method: "POST",
       data: { contents: [{ parts: [{ text: msg }] }] },

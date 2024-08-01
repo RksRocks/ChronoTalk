@@ -3,18 +3,22 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
 import styled from "styled-components";
-import { allUsersRoute, host } from "../utils/APIRoutes";
+import { allUsersRoute, host, timerRoute } from "../utils/APIRoutes";
 import ChatContainer from "../components/ChatContainer";
 import Contacts from "../components/Contacts";
 import Welcome from "../components/Welcome";
 import AiChatContainer from "../components/AiChatContainer";
-
+import TimerDisplay from "../components/TimerDisplay";
 export default function Chat() {
   const navigate = useNavigate();
   const socket = useRef();
   const [contacts, setContacts] = useState([]);
   const [currentChat, setCurrentChat] = useState(undefined);
   const [currentUser, setCurrentUser] = useState(undefined);
+  const [timeSpent, setTimeSpent] = useState(0);
+  const [Intervals, setIntervals] = useState(0);
+  const intervalRef = useRef();
+  const [changer, setChanger] = useState(0);
   useEffect(async () => {
     if (!localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)) {
       navigate("/login");
@@ -30,8 +34,86 @@ export default function Chat() {
     if (currentUser) {
       socket.current = io(host);
       socket.current.emit("add-user", currentUser._id);
+
+      const checkUserTime = async () => {
+        const { data } = await axios.get(
+          `${timerRoute}/time/${currentUser._id}`
+        );
+        if (data.timeSpent >= 3600) {
+          // 3600 seconds = 1 hour
+          alert("You have reached your time limit for today.");
+          navigate("/login");
+        } else {
+          setTimeSpent(data.timeSpent);
+          startTimer();
+        }
+      };
+
+      checkUserTime();
     }
   }, [currentUser]);
+
+  const startTimer = () => {
+    intervalRef.current = setInterval(() => {
+      setTimeSpent((prev) => {
+        const newTime = prev + 1;
+        if (newTime >= 3600) {
+          clearInterval(intervalRef.current);
+          alert("You have reached your time limit for today.");
+          navigate("/login");
+        }
+        return newTime;
+      });
+    }, 1000);
+  };
+
+  useEffect(async () => {
+    if (changer === 0) {
+      return;
+    }
+    await axios.post(
+      `${timerRoute}/update-time/${
+        JSON.parse(localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY))
+          ._id
+      }`,
+      {
+        timeSpent,
+      }
+    );
+  }, [changer]);
+
+  const stopTimer = async () => {
+    // await updateTimerr();
+    setChanger(Math.random() * 10);
+    clearInterval(intervalRef.current);
+  };
+
+  useEffect(() => {
+    window.addEventListener("focus", startTimer);
+    window.addEventListener("blur", stopTimer);
+    window.addEventListener("beforeunload", stopTimer);
+
+    return () => {
+      window.removeEventListener("focus", startTimer);
+      window.removeEventListener("blur", stopTimer);
+      window.removeEventListener("beforeunload", stopTimer);
+    };
+  }, []);
+
+  useEffect(() => {
+    setIntervals((prv) => prv + 1);
+    const updateTimer = async () => {
+      if (currentUser) {
+        await axios.post(`${timerRoute}/update-time/${currentUser._id}`, {
+          timeSpent,
+        });
+      }
+    };
+    if (Intervals === 60) {
+      setIntervals(0);
+      updateTimer();
+    }
+  }, [timeSpent]);
 
   useEffect(async () => {
     if (currentUser) {
@@ -49,6 +131,7 @@ export default function Chat() {
   return (
     <>
       <Container>
+        <TimerDisplay timeSpent={timeSpent} />
         <div className="container">
           <Contacts contacts={contacts} changeChat={handleChatChange} />
           {currentChat === undefined ? (
