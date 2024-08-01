@@ -36,11 +36,6 @@ app.get("/ping", (_req, res) => {
 });
 
 app.post("/ai/chat", async (req, res) => {
-  // const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-  // const prompt = req.body.msg;
-  // const result = await model.generateContent(prompt);
-  // const response = await result.response;
-  // const text = response.candidates[0].content.parts[0].text;
   res.json({
     msg: process.env.API_KEY,
   });

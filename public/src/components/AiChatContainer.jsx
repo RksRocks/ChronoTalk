@@ -29,7 +29,7 @@ function AiChatContainer() {
       fromSelf: false,
       message: googleRes.data.candidates[0].content.parts[0].text,
     });
-    // setArrivalMessage({ fromSelf: false, message: res.data.msg });
+  
   };
   return (
     <Container>

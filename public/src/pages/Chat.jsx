@@ -40,7 +40,6 @@ export default function Chat() {
           `${timerRoute}/time/${currentUser._id}`
         );
         if (data.timeSpent >= 3600) {
-          // 3600 seconds = 1 hour
           alert("You have reached your time limit for today.");
           navigate("/login");
         } else {
@@ -83,7 +82,6 @@ export default function Chat() {
   }, [changer]);
 
   const stopTimer = async () => {
-    // await updateTimerr();
     setChanger(Math.random() * 10);
     clearInterval(intervalRef.current);
   };

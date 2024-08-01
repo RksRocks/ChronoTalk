@@ -33,7 +33,7 @@ export default function Contacts({ contacts, changeChat }) {
                 setCurrentSelected("AI");
                 changeChat("AI");
               }}
-              // onClick={() => changeCurrentChat(index, contact)}
+             
             >
               <div className="avatar">
                 <img src={`https://api.multiavatar.com/4645646.svg`} alt="" />
